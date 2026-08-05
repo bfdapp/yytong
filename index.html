@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>九年义务一页通 · 甘肃 3-9 年级全学科知识点压缩卡</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<button id="menuBtn" aria-label="打开菜单">☰</button>
+<div id="overlay"></div>
+
+<!-- ===== 首页介绍页 ===== -->
+<div id="homeView" class="home-view">
+  <div class="home-hero">
+    <div class="home-badge">📚</div>
+    <h1>九年义务一页通</h1>
+    <p class="home-slogan">甘肃 3-9年级 · 全学科核心知识点<br>一学期 · 一页 A4 · 装进脑子</p>
+    <button id="startBtn" class="home-start">🚀 开始学习</button>
+    <div class="home-hero-sub">
+      <button id="startTestBtn" class="home-start ghost">📝 试卷中心 · 免费组卷</button>
+    </div>
+    <div class="home-stats">
+      <div class="stat"><b>84</b><span>张知识卡</span></div>
+      <div class="stat"><b>14</b><span>个学期</span></div>
+      <div class="stat"><b>10</b><span>门学科</span></div>
+      <div class="stat"><b>3-9</b><span>年级覆盖</span></div>
+    </div>
+  </div>
+
+  <div class="home-section">
+    <h2>✨ 为什么用它</h2>
+    <div class="home-features">
+      <div class="feat">
+        <div class="feat-icon">📄</div>
+        <h3>极致压缩</h3>
+        <p>一个学期的核心知识，压缩成一张 A4 纸。背诵、复习、考前突击都够用。</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🎯</div>
+        <h3>全科覆盖</h3>
+        <p>语文、数学、英语 + 科学、道法、历史、地理、生物、物理、化学，一门不落。</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">🖨️</div>
+        <h3>一键打印</h3>
+        <p>电脑打印、手机连打印机都行，彩色 / 黑白任选，即打即用。</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">📱</div>
+        <h3>随身离线</h3>
+        <p>安卓 APK 内置全部内容，无网也能看；知识块轻触展开，手机浏览超顺滑。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="home-section">
+    <h2>📖 覆盖学科</h2>
+    <div id="homeSubjects" class="home-subjects"></div>
+  </div>
+
+  <div class="home-section">
+    <h2>🛤️ 三步开始</h2>
+    <div class="home-steps">
+      <div class="step"><span class="step-n">1</span><h3>选年级</h3><p>3年级 ~ 9年级</p></div>
+      <div class="step"><span class="step-n">2</span><h3>选学期</h3><p>上册 / 下册</p></div>
+      <div class="step"><span class="step-n">3</span><h3>选学科</h3><p>即刻开背 📖</p></div>
+    </div>
+  </div>
+
+  <div class="home-foot">
+    <p>以部编版 / 人教版 / 教科版为主线整理，供复习参考，具体以当地教材为准</p>
+    <p class="ver">九年义务一页通 <b>v2.19</b> · 网页版 + 安卓版</p>
+  </div>
+</div>
+
+<div id="app">
+  <!-- ===== 侧边栏 ===== -->
+  <aside id="sidebar">
+    <div class="logo">
+      <div class="logo-badge">📚</div>
+      <div class="logo-text">
+        <h1>九年义务一页通</h1>
+        <p>甘肃 3-9年级 · 全学科 · 一页装下</p>
+      </div>
+    </div>
+
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="搜索知识点，如 勾股定理 / 过去时…">
+      <div id="searchResults" class="search-results hidden"></div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label"><span class="step-dot">1</span>选择年级</div>
+      <div id="gradeNav" class="grade-nav"></div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label"><span class="step-dot">2</span>选择学期</div>
+      <div id="termNav" class="term-nav"></div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-label"><span class="step-dot">3</span>选择学科</div>
+      <div id="subjectNav" class="subject-nav"></div>
+    </div>
+
+    <div class="nav-section confirm-section">
+      <button id="confirmBtn" class="btn-confirm" type="button">
+        <span class="confirm-label">✅ 确认查看</span>
+        <span id="confirmSummary" class="confirm-summary">请先选择年级、学期、学科</span>
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="btn-group">
+        <button id="printBtn" class="btn-print">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          打印当前卡片
+        </button>
+        <button id="printAllBtn" class="btn-print ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+          打印本学期全部
+        </button>
+        <button id="printHelpBtn" class="btn-print ghost" type="button">🖨 打印连接帮助</button>
+      </div>
+      <div id="printHelpBox" class="print-help hidden">
+        <div class="ph-tip">💡 <b>最简单保存法</b>：点「打印当前卡片 / 打印本卷」→ 系统对话框选「<b>另存为 PDF</b>」→ 即保存成功（不依赖打印机，最稳）</div>
+        <div class="ph-title">📶 系统打印服务检测</div>
+        <div id="phServices" class="ph-services">检测中…</div>
+        <button id="phBluetoothBtn" class="ph-btn" type="button">📱 打开手机蓝牙设置</button>
+        <div class="ph-bt">
+          <div class="ph-title">🖨 蓝牙直连打印（启锐 / 爱印等热敏打印机）</div>
+          <div id="phBtStatus" class="ph-services">检测中…</div>
+          <div class="ph-bt-actions">
+            <button id="phBtScanBtn" class="ph-btn small" type="button">🔍 扫描蓝牙设备</button>
+            <select id="phPaperW" class="ph-select" title="纸张宽度（只影响排版，不影响连接）">
+              <option value="32">58mm 热敏纸</option>
+              <option value="48">80mm 热敏纸</option>
+              <option value="64">210mm A4 热敏纸</option>
+            </select>
+          </div>
+          <div id="phBtList" class="ph-bt-list"></div>
+          <button id="phBtPrintBtn" class="ph-btn small hidden" type="button">🖨 打印当前知识卡</button>
+        </div>
+        <div class="ph-export">
+          <div class="ph-title">💾 导出文件（可用爱印 / 电脑打开打印）</div>
+          <div class="ph-bt-actions">
+            <button id="phImgBtn" class="ph-btn small" type="button">🖼 保存为图片</button>
+            <button id="phPdfBtn" class="ph-btn small" type="button">📄 保存为 PDF</button>
+          </div>
+          <div id="phExportStatus" class="ph-services"></div>
+          <div class="ph-steps">提示：先滚动卡片到屏幕合适位置，保存内容即屏幕所示</div>
+        </div>
+        <div class="ph-steps">
+          <b>连接三步：</b><br>
+          ① 蓝牙打印机：手机「设置 → 蓝牙」配对连接（或下方扫描）<br>
+          ② WiFi 打印机：打印机面板「网络设置」连到家里 WiFi<br>
+          ③ 装打印插件：应用商店搜「Mopria Print Service」或打印机品牌插件<br>
+          <b>热敏打印机（启锐/爱印等）直接用上方「蓝牙直连打印」</b>
+        </div>
+      </div>
+      <p class="tip">* 以部编版 / 人教版 / 教科版为主线，供复习参考，具体以当地教材为准</p>
+      <p class="ver">九年义务一页通 <b>v2.19</b></p>
+    </div>
+  </aside>
+
+  <!-- ===== 主区域 ===== -->
+  <main id="main">
+    <div class="main-topbar">
+      <button id="backBtn" class="home-btn" title="返回">←</button>
+      <button id="homeBtn" class="home-btn" title="返回首页">🏠</button>
+      <div id="breadcrumb" class="breadcrumb"></div>
+      <div class="tab-switch" id="tabSwitch">
+        <button id="tabCard" class="tab-btn active">📄 知识点卡</button>
+        <button id="tabTest" class="tab-btn">📝 试卷中心</button>
+      </div>
+      <div class="zoom-control" title="屏幕预览缩放（不影响打印）">
+        <button id="zoomOut" class="zoom-btn">−</button>
+        <span id="zoomLabel" class="zoom-label">100%</span>
+        <button id="zoomIn" class="zoom-btn">+</button>
+      </div>
+    </div>
+    <div id="cardWrap" class="card-wrap">
+      <div id="cardView" class="card"></div>
+    </div>
+    <div id="testView" class="test-view hidden"></div>
+  </main>
+</div>
+
+<!-- 打印本学期全部卡片用的隐藏容器 -->
+<div id="printAll" class="print-all" aria-hidden="true"></div>
+
+<!-- 导出文件（图片/PDF）用的 A4 独立容器：正常文档流，测量高度准确 -->
+<div id="exportBox" class="export-box" aria-hidden="true"></div>
+
+<script src="js/data/g3.js"></script>
+<script src="js/data/g4.js"></script>
+<script src="js/data/g5.js"></script>
+<script src="js/data/g6.js"></script>
+<script src="js/data/g7.js"></script>
+<script src="js/data/g8.js"></script>
+<script src="js/data/g9.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
