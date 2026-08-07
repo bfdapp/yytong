@@ -1407,12 +1407,22 @@
   const phImgBtn = $("phImgBtn");
   if (phImgBtn) phImgBtn.onclick = function () { exportCardAs("image"); };
   const phPdfBtn = $("phPdfBtn");
-  if (phPdfBtn) phPdfBtn.onclick = function () { exportCardAs("pdf"); };
+  if (phPdfBtn) phPdfBtn.onclick = function () { printCardToPdf(); };
   /* 侧边栏直接放保存按钮（无需进二级面板） */
   const saveImgBtn = $("saveImgBtn");
   if (saveImgBtn) saveImgBtn.onclick = function () { saveImgBtn.textContent = "⏳ 生成中…"; exportCardAs("image"); };
   const savePdfBtn = $("savePdfBtn");
-  if (savePdfBtn) savePdfBtn.onclick = function () { savePdfBtn.textContent = "⏳ 生成中…"; exportCardAs("pdf"); };
+  if (savePdfBtn) savePdfBtn.onclick = function () { printCardToPdf(); };
+  /* 保存 PDF 走系统打印引擎（打印预览 A4 排版 100% 正常）→ 用户选「另存为 PDF」即可 */
+  function printCardToPdf() {
+    const box = $("phExportStatus");
+    if (box) box.textContent = "📄 请在预览中选「另存为 PDF」…";
+    document.body.classList.remove("printing-all", "printing-test", "export-a4");
+    printAllBox.innerHTML = "";
+    if (exportBox) exportBox.innerHTML = "";
+    if (hasBridge()) window.AndroidBridge.printCurrent();
+    else window.print();
+  }
   window.__exportDone = function (msg, name) {
     // 所有导出（图片/PDF/试卷）完成后：恢复页面
     document.body.classList.remove("printing-test");
