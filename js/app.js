@@ -536,10 +536,11 @@
   }
 
   $("printBtn").addEventListener("click", () => {
+    // 复位打印状态（清掉残留的打印全部/试卷/导出状态），防止多出空白页
+    document.body.classList.remove("printing-all", "printing-test", "export-a4");
+    printAllBox.innerHTML = "";
+    if (exportBox) exportBox.innerHTML = "";
     if (hasBridge()) {
-      // APK：先复位为只打印当前卡片，再调原生打印
-      document.body.classList.remove("printing-all");
-      printAllBox.innerHTML = "";
       window.AndroidBridge.printCurrent();
     } else {
       window.print();
@@ -548,6 +549,8 @@
 
   $("printAllBtn").addEventListener("click", () => {
     stopSpeech();
+    document.body.classList.remove("printing-test", "export-a4");
+    if (exportBox) exportBox.innerHTML = "";
     const termData = getTermData();
     if (!termData) return;
     const names = Object.keys(termData).sort((a, b) =>
@@ -1405,6 +1408,11 @@
   if (phImgBtn) phImgBtn.onclick = function () { exportCardAs("image"); };
   const phPdfBtn = $("phPdfBtn");
   if (phPdfBtn) phPdfBtn.onclick = function () { exportCardAs("pdf"); };
+  /* 侧边栏直接放保存按钮（无需进二级面板） */
+  const saveImgBtn = $("saveImgBtn");
+  if (saveImgBtn) saveImgBtn.onclick = function () { saveImgBtn.textContent = "⏳ 生成中…"; exportCardAs("image"); };
+  const savePdfBtn = $("savePdfBtn");
+  if (savePdfBtn) savePdfBtn.onclick = function () { savePdfBtn.textContent = "⏳ 生成中…"; exportCardAs("pdf"); };
   window.__exportDone = function (msg, name) {
     // 所有导出（图片/PDF/试卷）完成后：恢复页面
     document.body.classList.remove("printing-test");
@@ -1414,6 +1422,10 @@
     exportBox.classList.remove("a4");
     const et = $("exportTestBtn");
     if (et) et.textContent = "💾 导出 PDF";
+    const si = $("saveImgBtn");
+    if (si) si.textContent = "🖼 保存卡片图片";
+    const sp = $("savePdfBtn");
+    if (sp) sp.textContent = "📄 保存卡片 PDF";
     const box = $("phExportStatus");
     if (box) box.textContent = msg;
   };
