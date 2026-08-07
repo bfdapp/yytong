@@ -1366,7 +1366,7 @@
       vh: Math.max(window.innerHeight, 1)
     });
   }
-  /* 导出当前知识卡：放入独立容器（视口宽、无缩放）→ 展开全部知识点 → 测量 → 原生逐屏截图拼接 */
+  /* 导出当前知识卡：布局视口能容纳 A4(210mm) 就压缩成一页，否则按屏幕宽度完整导出（长图/多页） */
   function exportCardAs(kind) {
     const box = $("phExportStatus");
     if (!hasSnapshot()) {
@@ -1384,9 +1384,21 @@
     document.body.classList.add("export-a4");
     // 等布局稳定（CSS 展开 + 页面重排）
     setTimeout(function () {
-      const dims = buildExportDims(exportBox);
-      if (kind === "image") window.SnapshotBridge.saveImage(dims);
-      else window.SnapshotBridge.savePdf(dims);
+      if (window.innerWidth >= 700) {
+        // A4 布局可用：210mm + fitCard 压缩到一页
+        exportBox.classList.add("a4");
+        fitCard(card, true);
+        requestAnimationFrame(function () {
+          const dims = buildExportDims(exportBox);
+          if (kind === "image") window.SnapshotBridge.saveImage(dims);
+          else window.SnapshotBridge.savePdf(dims);
+        });
+      } else {
+        // 布局视口窄：按屏幕宽度完整导出（内容完整优先）
+        const dims = buildExportDims(exportBox);
+        if (kind === "image") window.SnapshotBridge.saveImage(dims);
+        else window.SnapshotBridge.savePdf(dims);
+      }
     }, 600);
   }
   const phImgBtn = $("phImgBtn");
@@ -1399,6 +1411,7 @@
     document.body.classList.remove("snapshot-mode");
     document.body.classList.remove("export-a4");
     exportBox.innerHTML = "";
+    exportBox.classList.remove("a4");
     const et = $("exportTestBtn");
     if (et) et.textContent = "💾 导出 PDF";
     const box = $("phExportStatus");

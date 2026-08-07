@@ -287,6 +287,9 @@ body.snapshot-mode .kblocks::before { display: none !important; }
 
 /* 导出版式：屏幕只显示 #exportBox（独立容器，宽度=视口宽，无缩放无白板），隐藏其他界面 */
 .export-box { display: none; }
+/* 关键：整个隐藏 #app 容器（含 sidebar/main），否则空的 #app 仍占满屏幕高度，
+   把 exportBox 挤到屏幕下方，截图全白 */
+body.export-a4 #app { display: none !important; }
 body.export-a4 #sidebar, body.export-a4 .main-topbar, body.export-a4 #menuBtn,
 body.export-a4 #overlay, body.export-a4 #homeView, body.export-a4 .tab-switch,
 body.export-a4 .zoom-control, body.export-a4 #main { display: none !important; }
@@ -303,6 +306,10 @@ body.export-a4 #exportBox .kblock-title::after { content: "" !important; }
 body.export-a4 #exportBox .kblocks::before { display: none !important; }
 body.export-a4 #exportBox .kblock.open { /* 保持展开 */ }
 body.export-a4 #exportBox .paper-answer { display: none !important; }
+/* A4 一页模式：系统布局视口能容纳 210mm 时启用（fitCard 压缩内容到一页 A4） */
+body.export-a4 #exportBox.a4 { width: 210mm !important; }
+body.export-a4 #exportBox.a4 .card, body.export-a4 #exportBox.a4 .paper { width: 210mm; }
+body.export-a4 #exportBox.a4 .card { min-height: 297mm; }
 .ver b { color: var(--brand); font-weight: 800; }
 
 /* ========== 主区域 ========== */
