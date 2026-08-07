@@ -1408,16 +1408,47 @@
   if (phImgBtn) phImgBtn.onclick = function () { exportCardAs("image"); };
   const phPdfBtn = $("phPdfBtn");
   if (phPdfBtn) phPdfBtn.onclick = function () { printCardToPdf(); };
-  /* 侧边栏直接放保存按钮（无需进二级面板） */
+  /* ---------- A4 预览后保存（点保存先看预览，所见即所得，和打印预览一致） ---------- */
+  function openPreview() {
+    const card = buildCardHTML(state.subject);
+    if (!card) return;
+    exportBox.innerHTML = "";
+    exportBox.appendChild(card);
+    document.body.classList.add("export-a4", "preview-mode");
+    // 布局视口够宽时启用 A4 一页压缩
+    if (window.innerWidth >= 700) {
+      exportBox.classList.add("a4");
+      fitCard(card, true);
+    }
+  }
+  function closePreview() {
+    document.body.classList.remove("export-a4", "preview-mode");
+    exportBox.innerHTML = "";
+    exportBox.classList.remove("a4");
+  }
+  const pvSaveImg = $("pvSaveImg");
+  if (pvSaveImg) pvSaveImg.onclick = function () {
+    // 隐藏预览工具栏（避免截进图片）→ 生成图片 → 完成自动回主页
+    document.body.classList.remove("preview-mode");
+    exportCardAs("image");
+  };
+  const pvSavePdf = $("pvSavePdf");
+  if (pvSavePdf) pvSavePdf.onclick = function () {
+    closePreview();
+    printCardToPdf();
+  };
+  const pvClose = $("pvClose");
+  if (pvClose) pvClose.onclick = closePreview;
+  /* 侧边栏保存按钮：先打开 A4 预览，预览里再保存 */
   const saveImgBtn = $("saveImgBtn");
-  if (saveImgBtn) saveImgBtn.onclick = function () { saveImgBtn.textContent = "⏳ 生成中…"; exportCardAs("image"); };
+  if (saveImgBtn) saveImgBtn.onclick = function () { openPreview(); };
   const savePdfBtn = $("savePdfBtn");
-  if (savePdfBtn) savePdfBtn.onclick = function () { printCardToPdf(); };
+  if (savePdfBtn) savePdfBtn.onclick = function () { openPreview(); };
   /* 保存 PDF 走系统打印引擎（打印预览 A4 排版 100% 正常）→ 用户选「另存为 PDF」即可 */
   function printCardToPdf() {
     const box = $("phExportStatus");
     if (box) box.textContent = "📄 请在预览中选「另存为 PDF」…";
-    document.body.classList.remove("printing-all", "printing-test", "export-a4");
+    document.body.classList.remove("printing-all", "printing-test", "export-a4", "preview-mode");
     printAllBox.innerHTML = "";
     if (exportBox) exportBox.innerHTML = "";
     if (hasBridge()) window.AndroidBridge.printCurrent();
