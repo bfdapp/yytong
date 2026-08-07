@@ -310,6 +310,22 @@ body.export-a4 #exportBox .paper-answer { display: none !important; }
 body.export-a4 #exportBox.a4 { width: 210mm !important; }
 body.export-a4 #exportBox.a4 .card, body.export-a4 #exportBox.a4 .paper { width: 210mm; }
 body.export-a4 #exportBox.a4 .card { min-height: 297mm; }
+
+/* 打印预览工具栏：点保存图片/PDF 先显示 A4 预览，所见即所得 */
+.preview-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  display: none; align-items: center; gap: 8px; padding: 8px 12px;
+  background: rgba(255, 255, 255, .97); box-shadow: 0 2px 10px rgba(0, 0, 0, .18);
+}
+.preview-bar.hidden { display: none !important; }
+body.preview-mode #previewBar { display: flex !important; }
+.preview-bar .pv-title { font-size: 13px; font-weight: 800; color: var(--brand); margin-right: auto; }
+.pv-btn {
+  border: none; border-radius: 8px; padding: 7px 12px; font-size: 12px; font-weight: 700;
+  background: var(--brand); color: #fff; cursor: pointer; transition: opacity .15s;
+}
+.pv-btn:hover { opacity: .9; }
+.pv-btn.ghost { background: #eef2ff; color: var(--brand); }
 .ver b { color: var(--brand); font-weight: 800; }
 
 /* ========== 主区域 ========== */
