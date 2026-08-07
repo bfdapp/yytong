@@ -1415,16 +1415,12 @@
     exportBox.innerHTML = "";
     exportBox.appendChild(card);
     document.body.classList.add("export-a4", "preview-mode");
-    // 布局视口够宽时启用 A4 一页压缩
-    if (window.innerWidth >= 700) {
-      exportBox.classList.add("a4");
-      fitCard(card, true);
-    }
+    // 强制 A4 一页压缩（exportBox 已设为 210mm + fitCard 压缩内容）
+    fitCard(card, true);
   }
   function closePreview() {
     document.body.classList.remove("export-a4", "preview-mode");
     exportBox.innerHTML = "";
-    exportBox.classList.remove("a4");
   }
   const pvSaveImg = $("pvSaveImg");
   if (pvSaveImg) pvSaveImg.onclick = function () {
