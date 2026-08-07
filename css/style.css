@@ -906,10 +906,16 @@ body:not(.view-home) .home-btn:hover { background: #eef2ff; transform: translate
     padding: 9mm 10mm;
     border-top: none;
     border: 1px solid #555; /* 细灰框，彩色/黑白打印均协调 */
-    page-break-after: always;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+  /* 打印当前卡片：单张卡片后面不再强制分页（避免末尾空白页）；多卡打印用 #printAll 控制分页 */
+  .card { page-break-after: auto; }
+  /* 屏幕外容器打印时一律隐藏，防止产生空白页；仅"打印全部"时显示 */
+  #printAll { display: none !important; }
+  body.printing-all #printAll { display: block !important; position: static; left: auto; width: auto; }
+  #printAll .card { page-break-after: always; margin: 0; }
+  #printAll .card:last-child { page-break-after: auto; }
   /* 易错点：加粗+下划线（黑白打印也醒目；彩色打印保留红色） */
   .kblock li b, .card-foot .cf-note b { font-weight: 800; text-decoration: underline; }
   .kblock { border-color: #cbd5e1; }
